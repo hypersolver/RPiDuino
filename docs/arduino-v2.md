@@ -1,6 +1,6 @@
 # Pi 3B+ 的 Arduino V2 測試
 
-`XDOS XAPP V2 (MC4FQ)` 可從 RPiDuino 原始碼安裝試用。已發行的 0.1.4 板卡包仍使用原先的 FILEQ128 XAPP 和裸機 IMG 選項。
+RPiDuino 0.1.5 已提供 XDOS XAPP V2。FVCORE2 安裝、配對與實測見 [0.1.5 指南](v0.1.5.md)。下方保留 MC4FQ 與 IPC 測試流程。
 
 ## 建置
 
@@ -38,3 +38,15 @@ make -C /path/to/circle/sample/xdos-sdboot
 以此次建置產出的 IMG、ELF、標頭重新配對四個範例。既有 MC4FQ 發行映像沒有此測試核心的 IPC 匯出。
 
 Pi 3B+ 已透過 UART 驗證四個範例的上傳和啟動。先測得 `V2Counter` 與 `V2Monitor` 兩槽並行及單獨重開，再測得 IPC 接收端更新 LVGL Label，回報值依序為 `1`、`5`，重開接收端後為 `19`、`23`。關閉後四槽皆回收。此紀錄來自 UART 與程式回讀，未另做 HDMI 目視驗收。
+
+## Screen 清單與工作核心上的 delay()
+
+選 **工具 → XAPP Screen (XDOS V2)** 的 **None**（預設）、**Window** 或 **Full**。編譯會在建置目錄的 XAPP 旁產生 .APP 清單，明列 Screen 和 SD 上的配對檔名。手動安裝時，依編譯輸出指定的檔名放入 `XDOS/INBOX`，再把 .APP 放入 `XDOS/APPS`。使用 UART 上傳時，工具會更新建置目錄的 .APP，使 Exec 指向實際傳輸的檔名。若要從桌面啟動，仍需將 .APP 放入 `XDOS/APPS`。
+
+FVCORE2 或相容核心支援 Arduino V2 工作核心的 `delay()`。工作核心在延遲期間可以睡眠，收到關閉請求會提前返回。草稿可在 delay() 後呼叫 `rpiduino_xdos_stop_requested()`，並從 loop() 返回以便釋放核心。CPU0 的 Arduino delay() 沿用核心原本的實作。
+
+## Screen manifests and borrowed-core delay
+
+Select **Tools → XAPP Screen (XDOS V2)** and choose **None** (default), **Window**, or **Full**. The build generates an .APP beside the XAPP in the build directory. To install manually, use the executable filename shown by the build in `XDOS/INBOX`, and place the .APP in `XDOS/APPS`. UART upload updates the local .APP to refer to the uploaded filename. Copy that manifest to `XDOS/APPS` for a desktop shortcut.
+
+On FVCORE2 or a compatible host, `delay()` sleeps on a borrowed core and returns early when the host requests closure. Check `rpiduino_xdos_stop_requested()` after delay and return from loop() when it is true. CPU0 continues to use the host's original delay implementation.

@@ -22,7 +22,7 @@ RPiDuino 是 Raspberry Pi 的 Arduino IDE 板卡套件。用 `setup()` 和 `loop
 
    [舊版 XDOS 板卡索引](https://raw.githubusercontent.com/hypersolver/raspberry-pi-xdos/main/package_rpiduino_index.json)仍保留，已使用舊網址的安裝可繼續使用。
 
-4. 開啟 **開發板管理員**，搜尋 **RPiDuino** 並安裝 **0.1.4**。在 **工具 → 開發板 → RPiDuino** 選擇對應的 Pi 2、3/3B+、4 或 5。
+4. 開啟 **開發板管理員**，搜尋 **RPiDuino** 並安裝 **0.1.5**。在 **工具 → 開發板 → RPiDuino** 選擇對應的 Pi 2、3/3B+、4 或 5。
 
 從原始碼開發時，也可將 [hardware/rpiduino](hardware/rpiduino) 複製到 Arduino Sketchbook 的 `hardware` 目錄，重啟 IDE 後選擇該開發板。
 
@@ -68,3 +68,5 @@ void loop() {
 更新板卡套件時，先提升 `hardware/rpiduino/bcm/platform.txt` 的版本，再從倉庫根目錄執行 `python package.py`。將新版 ZIP 和索引一起提交，並保留舊版 ZIP 供既有安裝使用。
 
 SDK 自 [Raspberry Pi XDOS](https://github.com/hypersolver/raspberry-pi-xdos) 分出。Circle 為固定版本的建置依賴，XDOS 韌體仍由原專案提供。[來源與授權](docs/provenance.md)
+
+[0.1.5 的 XDOS V2 操作與 Pi 3B+ 實測](docs/v0.1.5.md)

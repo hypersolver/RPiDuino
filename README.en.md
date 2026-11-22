@@ -22,7 +22,7 @@ RPiDuino compiles Arduino sketches into bootable images for Raspberry Pi. The Pi
 
    Existing installations can continue using the [legacy XDOS index](https://raw.githubusercontent.com/hypersolver/raspberry-pi-xdos/main/package_rpiduino_index.json).
 
-4. Search for **RPiDuino** in Boards Manager, install **0.1.4**, and select your Raspberry Pi model under **Tools → Board → RPiDuino**.
+4. Search for **RPiDuino** in Boards Manager, install **0.1.5**, and select your Raspberry Pi model under **Tools → Board → RPiDuino**.
 
 For source development, copy [hardware/rpiduino](hardware/rpiduino) into your Arduino sketchbook's `hardware` directory and restart the IDE.
 
@@ -64,3 +64,5 @@ Select **XDOS XAPP** and open **File → Examples → RPiDuino Basics → XDOS �
 On Pi 3B+, MC4FQ supports up to four concurrent compatible V2 XAPPs. See the [SDK compatibility and release notes](docs/xdos-compatibility.md) for the Arduino V2 status and the inputs to pair with each host build. For inter-sketch communication, the proposed design uses an IPC message interface backed by shared memory. See [multicore and IPC design notes (繁體中文)](docs/multicore.md). See the [Arduino V2 source setup guide (繁體中文)](docs/arduino-v2.md) to try the experimental target.
 
 To publish a new board package, bump the version in `hardware/rpiduino/bcm/platform.txt` and run `python package.py` from the repository root. Commit the generated index and archive together. Keep previous archives available.
+
+[0.1.5 XDOS V2 setup and Pi 3B+ verification](docs/v0.1.5.en.md)

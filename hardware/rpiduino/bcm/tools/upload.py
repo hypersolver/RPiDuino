@@ -34,7 +34,7 @@ def exchange(port, command, expected="@XDOS OK", timeout=5):
     raise TimeoutError(f"No XDOS reply to {operation}")
 
 
-def deploy(port, data, cdc_board=None, xapp_abi=None):
+def deploy(port, data, cdc_board=None, xapp_abi=None, screen="None"):
     suffix = "XAPP" if xapp_abi is not None else "IMG"
     name = f"A{secrets.token_hex(4)[:7].upper()}.{suffix}"
     crc = zlib.crc32(data)
@@ -54,9 +54,9 @@ def deploy(port, data, cdc_board=None, xapp_abi=None):
             pass
         raise
     if xapp_abi is not None:
-        launch = f"Run XAPP2 {name} from the XDOS UART console." if xapp_abi == 2 else "Open it from XDOS Files."
+        launch = f"Run XAPP2 {name} {screen.upper()} from the XDOS UART console." if xapp_abi == 2 else "Open it from XDOS Files."
         print(f"Uploaded and verified SD:/XDOS/INBOX/{name}. {launch}")
-        return
+        return name
     print("Receiver verified the transfer. Selecting the new kernel...", flush=True)
     exchange(port, f"BOOT {name} {crc:08x}", timeout=25)
     backup = "rpiduino-config.bak" if cdc_board else "xdosboot.bak"
@@ -88,9 +88,23 @@ def main():
             if (magic, abi, header, length, flags) != (b"XDAP", xapp_abi, expected_header, len(data), 1) or (
                     entry & 3 or not header <= entry < length):
                 raise ValueError("Invalid XDOS XAPP header")
+        screen = "None"
+        if xapp_abi == 2:
+            from build import write_v2_manifest
+
+            manifest = args.image.with_suffix(".APP")
+            if manifest.is_file():
+                screen = next((line.removeprefix("Screen=") for line in
+                               manifest.read_text(encoding="ascii").splitlines()
+                               if line.startswith("Screen=")), screen)
+            if screen not in ("Full", "Window", "None"):
+                raise ValueError("Invalid Screen value in the XAPP manifest")
         with serial.Serial(args.port, args.baud, timeout=0.2, write_timeout=3) as port:
             port.reset_input_buffer()
-            deploy(port, data, args.cdc_board, xapp_abi)
+            name = deploy(port, data, args.cdc_board, xapp_abi, screen)
+        if xapp_abi == 2:
+            manifest, _ = write_v2_manifest(args.image, screen, name)
+            print(f"Copy {manifest} to the card's XDOS/APPS directory to install a desktop shortcut.")
     except (OSError, ValueError, RuntimeError) as error:
         raise SystemExit(f"RPiDuino UART upload failed: {error}") from None
 

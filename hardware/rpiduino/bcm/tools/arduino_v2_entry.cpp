@@ -11,6 +11,33 @@ extern "C" __attribute__((weak)) bool xdos_sketch_can_stop() { return true; }
 
 extern "C" int32_t xapp_entry(const XdosHostApiV1 *api);
 
+#if RPIDUINO_SKETCH_CPU != 0
+extern "C" void __real_delay(unsigned long milliseconds);
+
+extern "C" void __wrap_delay(unsigned long milliseconds)
+{
+    while (milliseconds) {
+        const unsigned long step = milliseconds > 1000 ? 1000 : milliseconds;
+        const int result = xdos_core_sleep_us(static_cast<uint32_t>(step * 1000));
+        if (result < 0) {
+            __real_delay(milliseconds);
+            return;
+        }
+        if (result == 1) return;
+        milliseconds -= step;
+    }
+}
+#endif
+
+extern "C" bool rpiduino_xdos_stop_requested()
+{
+#if RPIDUINO_SKETCH_CPU != 0
+    return xdos_core_stop_requested() != 0;
+#else
+    return false;
+#endif
+}
+
 namespace {
 lv_timer_t *loopTimer;
 int sketchSlot;

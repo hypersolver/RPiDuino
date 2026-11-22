@@ -6,3 +6,6 @@
 
 // Route a diagnostic message through the XDOS host. Core 0 only.
 extern "C" void rpiduino_xdos_log(const char *message);
+
+// A worker sketch can return from loop() after an interrupted delay().
+extern "C" bool rpiduino_xdos_stop_requested();

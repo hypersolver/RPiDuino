@@ -1,5 +1,7 @@
 """Run the RPiDuino GNU toolchain natively or through WSL."""
+import hashlib
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -102,13 +104,36 @@ def link_v2(host, output, archive, objects, sketch_cpu):
         entry = Path(work) / "entry.o"
         run("arm-none-eabi-g++", *flags, "-c", tools / "arduino_v2_entry.cpp", "-o", entry)
         combined = Path(work) / "module.o"
-        run("arm-none-eabi-ld", "-r", entry, *objects, archive, "-o", combined)
+        wrap_delay = ("--wrap=delay",) if sketch_cpu != "0" else ()
+        run("arm-none-eabi-ld", "-r", *wrap_delay, entry, *objects, archive, "-o", combined)
         symbols = kernel_symbols(host / "kernel.elf")
         fingerprint = kernel_fingerprint(symbols, host / "kernel.img")
         module = Path(work) / "sketch.xapp"
         result = pack([combined], symbols, fingerprint, module, keep=work)
         shutil.copyfile(result["elf"], output)
         shutil.copyfile(module, output + ".xapp")
+
+
+def write_v2_manifest(image, screen, module_name=None):
+    if screen not in ("Full", "Window", "None"):
+        raise ValueError("XAPP V2 Screen must be Full, Window, or None")
+    image = Path(image)
+    sketch_name = image.stem.removesuffix(".ino")
+    if module_name is None:
+        stem = sketch_name.upper()
+        if not re.fullmatch(r"[A-Z0-9_-]{1,8}", stem):
+            stem = "A" + hashlib.sha256(sketch_name.encode("utf-8")).hexdigest()[:7].upper()
+        module_name = stem + ".XAPP"
+    if not re.fullmatch(r"[A-Za-z0-9_-]{1,8}\.[Xx][Aa][Pp][Pp]", module_name):
+        raise ValueError("Invalid XAPP filename for the XDOS manifest")
+    label = "".join(c if 32 <= ord(c) <= 126 else "?" for c in sketch_name)[:16]
+    manifest = image.with_suffix(".APP")
+    manifest.write_text(
+        f"[Application]\nName={label}\nExec=SD:/XDOS/INBOX/{module_name}\n"
+        f"ABI=2\nArch=armv7-a32\nScreen={screen}\n",
+        encoding="ascii",
+    )
+    return manifest, module_name
 
 
 def main():
@@ -138,8 +163,13 @@ def main():
     elif action == "ar":
         run(*launcher, prefix + "ar", "rcs", *(linux_path(arg) for arg in args))
     elif action == "image":
+        screen = "None"
+        if args[0] == "--screen":
+            screen, args = args[1], args[2:]
         if mode == "xappv2":
             shutil.copyfile(args[0] + ".xapp", args[1])
+            manifest, module = write_v2_manifest(args[1], screen)
+            print(f"XDOS manifest {manifest.name}; install the executable as {module}")
         else:
             run(*launcher, prefix + "objcopy", "-O", "binary", *(linux_path(arg) for arg in args))
     elif action == "link":
