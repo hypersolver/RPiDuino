@@ -2,6 +2,8 @@
 
 Pi 3B+ 的 XDOS MC4FQ 能同時執行最多四個符合該版 ABI 的 V2 XAPP。Arduino 草稿須先用相容的 V2 建置工具與同版 XDOS host SDK 編成 V2 XAPP，才能使用這個能力。RPiDuino 0.1.4 的內附 Arduino XAPP 流程以 FILEQ128 為目標。要試跑多程式，先依發行說明從 FILEQ128 升級並使用發行包配對的 V2 範例。裸機 IMG 模式則從單一開機映像執行一份 Arduino 草稿。[MC4FQ 發行及升級說明](https://github.com/hypersolver/raspberry-pi-xdos/releases/tag/v0.6.2-rc3-xapp6-mc4fq)
 
+[SDK 與 XDOS ABI 相容性](xdos-compatibility.md)
+
 ## Arduino 程式之間的通訊設計
 
 建議把 Message Tunnel 定義成程式看得到的 IPC 介面，底層以共享記憶體承載資料。這是建議的設計，現有 Arduino SDK 尚無這套 API。

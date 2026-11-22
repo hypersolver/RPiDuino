@@ -56,7 +56,7 @@ CDC 接收程式僅用於有 `RPIDUINO.TEST` 標記的測試卡。實機的 USB�
 | RPiDuino 4 | `rpiduino:bcm:rpiduino4` | `kernel=kernel8-rpi4.img` | `arm_64bit=1` |
 | RPiDuino 5 | `rpiduino:bcm:rpiduino5` | `kernel=kernel_2712.img` | `arm_64bit=1` |
 
-GPIO 使用 BCM 編號 0–27。`LED_BUILTIN` 對應板上的 ACT LED。四個板卡已使用 WSL 的 Arduino CLI 編譯驗證。仍待驗證各板實機啟動與 Windows Arduino IDE 建置。
+GPIO 使用 BCM 編號 0–27。`LED_BUILTIN` 對應板上的 ACT LED。四個板卡已使用 WSL 的 Arduino CLI 編譯驗證。Pi 3B+ 已使用 Arduino IDE 編譯 0.1.4 的 Blink，並驗證 UART 上傳及實機 ACT LED 閃爍。
 
 板卡安裝與第一個草稿請見 [RPiDuino 入門](../README.md)。
 

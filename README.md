@@ -1,5 +1,7 @@
 # RPiDuino
 
+[English](README.en.md)
+
 RPiDuino 是 Raspberry Pi 的 Arduino IDE 板卡套件。用 `setup()` 和 `loop()` 寫草稿，可編譯成 Pi 從 microSD 啟動的裸機 IMG。Pi 3B+ 也可將草稿建置成 XDOS XAPP，利用 XDOS 的 LVGL 顯示與輸入服務。
 
 ## 在 Arduino IDE 加入開發板
@@ -41,7 +43,7 @@ void loop() {
 }
 ```
 
-按 **驗證**，再用 **草稿 → 匯出編譯的二進位檔** 取得 IMG。第一次部署可走 microSD。依機型把 IMG 放進有對應開機韌體的 FAT 開機分割區，按照 [上傳及開機指南](docs/upload.md#從-microsd-啟動) 設定檔名和 `config.txt`。插卡開機後，板上的 ACT LED 應每半秒切換一次。
+按 **驗證**，再用 **草稿 → 匯出編譯的二進位檔** 取得 IMG。第一次部署可走 microSD。依機型把 IMG 放進有對應開機韌體的 FAT 開機分割區，按照 [上傳及開機指南](docs/upload.md#從-microsd-啟動) 設定檔名和 `config.txt`。插卡開機後，板上的 ACT LED 應每半秒切換一次。XDOS 專案已在 Pi 3B+ 以 0.1.4 驗證 Arduino IDE 編譯、UART 上傳及 ACT LED 閃爍。
 
 ## 選擇上傳方式
 
