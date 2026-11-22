@@ -1,0 +1,140 @@
+{
+  "packages": [
+    {
+      "name": "rpiduino",
+      "maintainer": "RPiDuino contributors",
+      "websiteURL": "https://github.com/hypersolver/RPiDuino",
+      "help": {
+        "online": "https://github.com/hypersolver/RPiDuino"
+      },
+      "platforms": [
+        {
+          "name": "RPiDuino",
+          "architecture": "bcm",
+          "version": "0.1.4",
+          "category": "Contributed",
+          "url": "https://raw.githubusercontent.com/hypersolver/RPiDuino/main/packages/rpiduino-bcm-0.1.4.zip",
+          "archiveFileName": "rpiduino-bcm-0.1.4.zip",
+          "checksum": "SHA-256:585813e9ded574fbb21ef04ecb9cadfbf379d70da19090d84be14a7456cac221",
+          "size": "1309140",
+          "boards": [
+            {
+              "name": "RPiDuino 2"
+            },
+            {
+              "name": "RPiDuino 3/3B+"
+            },
+            {
+              "name": "RPiDuino 4"
+            },
+            {
+              "name": "RPiDuino 5"
+            }
+          ],
+          "toolsDependencies": []
+        },
+        {
+          "name": "RPiDuino",
+          "architecture": "bcm",
+          "version": "0.1.3",
+          "category": "Contributed",
+          "url": "https://raw.githubusercontent.com/hypersolver/RPiDuino/main/packages/rpiduino-bcm-0.1.3.zip",
+          "archiveFileName": "rpiduino-bcm-0.1.3.zip",
+          "checksum": "SHA-256:58beb012d1313a6d344d5657fda37cedc59aea9b6e2786647a71a1466df60f69",
+          "size": "13115",
+          "boards": [
+            {
+              "name": "RPiDuino 2"
+            },
+            {
+              "name": "RPiDuino 3/3B+"
+            },
+            {
+              "name": "RPiDuino 4"
+            },
+            {
+              "name": "RPiDuino 5"
+            }
+          ],
+          "toolsDependencies": []
+        },
+        {
+          "name": "RPiDuino",
+          "architecture": "bcm",
+          "version": "0.1.2",
+          "category": "Contributed",
+          "url": "https://raw.githubusercontent.com/hypersolver/RPiDuino/main/packages/rpiduino-bcm-0.1.2.zip",
+          "archiveFileName": "rpiduino-bcm-0.1.2.zip",
+          "checksum": "SHA-256:cc5a271fdb07e4a58f29840ab8b895ffcba44f0d614c67558bb4179bdfbae79b",
+          "size": "8718",
+          "boards": [
+            {
+              "name": "RPiDuino 2"
+            },
+            {
+              "name": "RPiDuino 3/3B+"
+            },
+            {
+              "name": "RPiDuino 4"
+            },
+            {
+              "name": "RPiDuino 5"
+            }
+          ],
+          "toolsDependencies": []
+        },
+        {
+          "name": "RPiDuino",
+          "architecture": "bcm",
+          "version": "0.1.1",
+          "category": "Contributed",
+          "url": "https://raw.githubusercontent.com/hypersolver/RPiDuino/main/packages/rpiduino-bcm-0.1.1.zip",
+          "archiveFileName": "rpiduino-bcm-0.1.1.zip",
+          "checksum": "SHA-256:ac90a6fb553d65735c20044a93f14067d831f792e249c02b00e3a32c0fa1cd12",
+          "size": "6617",
+          "boards": [
+            {
+              "name": "RPiDuino 2"
+            },
+            {
+              "name": "RPiDuino 3/3B+"
+            },
+            {
+              "name": "RPiDuino 4"
+            },
+            {
+              "name": "RPiDuino 5"
+            }
+          ],
+          "toolsDependencies": []
+        },
+        {
+          "name": "RPiDuino",
+          "architecture": "bcm",
+          "version": "0.1.0",
+          "category": "Contributed",
+          "url": "https://raw.githubusercontent.com/hypersolver/RPiDuino/main/packages/rpiduino-bcm-0.1.0.zip",
+          "archiveFileName": "rpiduino-bcm-0.1.0.zip",
+          "checksum": "SHA-256:f6ad112e5f8114e446a998625158013edf28586feeef87cbd27eab1100d900ce",
+          "size": "5101",
+          "boards": [
+            {
+              "name": "RPiDuino 2"
+            },
+            {
+              "name": "RPiDuino 3/3B+"
+            },
+            {
+              "name": "RPiDuino 4"
+            },
+            {
+              "name": "RPiDuino 5"
+            }
+          ],
+          "toolsDependencies": []
+        }
+      ],
+      "tools": []
+    }
+  ]
+}
