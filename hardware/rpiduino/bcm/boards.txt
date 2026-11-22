@@ -42,3 +42,13 @@ rpiduino3.menu.target.xappv2=XDOS XAPP V2 (MC4FQ)
 rpiduino3.menu.target.xappv2.build.mode=xappv2
 rpiduino3.menu.target.xappv2.build.extension=xapp
 rpiduino3.menu.target.xappv2.upload.tool.serial=xdos_xappv2
+
+menu.sketchcpu=Sketch CPU (XDOS V2)
+rpiduino3.menu.sketchcpu.core0=CPU 0
+rpiduino3.menu.sketchcpu.core0.build.sketch_cpu=0
+rpiduino3.menu.sketchcpu.core2=CPU 2
+rpiduino3.menu.sketchcpu.core2.build.sketch_cpu=2
+rpiduino3.menu.sketchcpu.core3=CPU 3
+rpiduino3.menu.sketchcpu.core3.build.sketch_cpu=3
+rpiduino3.menu.sketchcpu.auto=Auto
+rpiduino3.menu.sketchcpu.auto.build.sketch_cpu=-1

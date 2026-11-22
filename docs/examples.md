@@ -22,16 +22,18 @@
 用已配對的 MC4FQ 主系統，將 **Build target** 改為 **XDOS XAPP V2 (MC4FQ)**。接上 HDMI 螢幕，依 [Arduino V2 建置與上傳](arduino-v2.md) 分別編譯、上傳每個草稿。上傳後記下各自的 `.XAPP` 檔名，在 XDOS UART 用 `XAPP2 <檔名>` 啟動。
 
 - **XDOSV2 → DualSketch**。先啟動 `V2Counter`，再啟動 `V2Monitor`。畫面上左右兩個視窗以不同節奏累計數字。用 `XAPP2-STATUS` 查看兩個槽。使用 `XAPP2-CLOSE <槽號>` 關掉其中一個，再啟動該草稿，另一個計數器會持續執行。
-- **XDOSV2 → MessageTunnelDashboard**。使用具備 IPC 匯出的測試核心。先啟動 `TunnelDisplay`，再啟動 `TunnelSender`。儀表板顯示實際收到的樣本值與其對應的 0–99 進度條，進度條在樣本值到達 100 的倍數時回到起點。關掉顯示端再開，應繼續收到傳送端的新值。UART 會印出每次啟動後第一與第五次 Label 更新。
+- **XDOSV2 → MessageTunnelDashboard**。使用具備 IPC 匯出的測試核心，兩支草稿皆選 CPU 0。先啟動 `TunnelDisplay`，再啟動 `TunnelSender`。儀表板顯示實際收到的樣本值與其對應的 0–99 進度條，進度條在樣本值到達 100 的倍數時回到起點。關掉顯示端再開，應繼續收到傳送端的新值。UART 會印出每次啟動後第一與第五次 Label 更新。
 
-MC4FQ 可用相同方式啟動第三、第四個相容 XAPP，四槽用完時第五次啟動會回報 `-8`。可以重複啟動 `V2Counter` 或 `V2Monitor` 試槽位，重複啟動的視窗會出現在相同初始位置，可用滑鼠拖開。Dashboard 的通道只允許一個接收端。V2 的 `setup()` 與 `loop()` 由 core 0 執行，程式可透過 XDOS 工作 API 借用其他核心。
+MC4FQ 可用相同方式啟動第三、第四個相容 XAPP，四槽用完時第五次啟動會回報 `-8`。可以重複啟動 `V2Counter` 或 `V2Monitor` 試槽位，重複啟動的視窗會出現在相同初始位置，可用滑鼠拖開。測試四個槽時請使用 CPU 0 版本。Dashboard 的通道只允許一個接收端。V2 的 `setup()` 在 CPU 0 執行，`loop()` 預設在 CPU 0，也可以依下節設定工作核心。
 
-## 怎麼看 CPU
+## 切換 DualSketch 使用的 CPU
 
-`XAPP2-STATUS` 的 `slots` 是程式實例編號，`cores` 是工作核心的狀態。比方說，槽 0 和槽 1 都是 `app`，而核心 1–3 仍顯示 `lvgl`，就是這次 DualSketch 的正常結果。
+選 **工具 → Sketch CPU (XDOS V2)**。把 `V2Counter` 編譯成 **CPU 2**，把 `V2Monitor` 編譯成 **CPU 3**，分開上傳並啟動。兩個畫面會各自顯示編譯設定、在 `loop()` 裡量到的 CPU 和計數，例如 `CPU 2 -> CPU 2 | Count: 5`。LVGL 由 CPU 0 更新，計數由各自的 `loop()` 產生。DualSketch 和 Dashboard 都需要有 IPC 匯出的測試核心。
 
-要標出實際 CPU，在要確認的函式內呼叫 `xdos_this_core()`。在 DualSketch 的 `loop()` 量到的是 core 0。若草稿使用 `xdos_core_lend_any()` 借核，請讓工作函式回傳自身量到的核心編號，再由 core 0 把該編號顯示在 LVGL。
+選 **CPU 0** 可在 UI 核心執行 `loop()`。**Auto** 優先用 CPU 3，再試 CPU 2；兩顆都忙會拒絕啟動。指定的 CPU 忙碌時也會拒絕啟動。關閉占用該核心的程式後再重試。Arduino CLI 可用 `rpiduino:bcm:rpiduino3:target=xappv2,sketchcpu=core2`，另有 `core0`、`core3` 和 `auto`。
 
 ## Pi 3B+ 驗證結果
 
 四個裸機 IMG 均已編譯。MC4FQ 測試核心上，兩支 DualSketch 草稿可並行並各自重開。重複啟動它們可占滿四槽，第五次啟動回報 `-8`。IPC 顯示端的 LVGL Label 透過 UART 回讀為 `1`、`5`，重開後為 `19`、`23`。本次未目視確認 HDMI，按鈕也僅驗證編譯。
+
+Pi 3B+ 的 CPU 選項驗收另確認 `CPU 0 -> CPU 0`，以及 `CPU 2 -> CPU 2`、`CPU 3 -> CPU 3` 同時遞增至 `Count: 10`。當 CPU 3 忙碌時 Auto 選到 CPU 2，兩顆都空閒時選 CPU 3。兩顆都忙時 Auto 回報無可用工作核心，重複指定 CPU 2 或 CPU 3 也回報忙碌。失敗的載入未占用槽。CPU 與計數來自 UART 回讀的 LVGL Label。

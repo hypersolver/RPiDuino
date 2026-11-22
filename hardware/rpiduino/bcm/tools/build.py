@@ -87,7 +87,7 @@ def v2_host():
     return Path(path).resolve()
 
 
-def link_v2(host, output, archive, objects):
+def link_v2(host, output, archive, objects, sketch_cpu):
     from xapp_v2_pack import kernel_fingerprint, kernel_symbols, pack
 
     tools = Path(__file__).resolve().parent
@@ -95,7 +95,8 @@ def link_v2(host, output, archive, objects):
              "-Os", "-std=gnu++17", "-ffreestanding", "-ffunction-sections",
              "-fdata-sections", "-fno-exceptions", "-fno-rtti", "-mword-relocations",
              "-fno-unwind-tables", "-fno-asynchronous-unwind-tables",
-             "-DLV_CONF_INCLUDE_SIMPLE", "-I" + str(host / "headers"),
+             "-DLV_CONF_INCLUDE_SIMPLE", f"-DRPIDUINO_SKETCH_CPU={sketch_cpu}",
+             "-I" + str(host / "headers"),
              "-I" + str(tools / "xapp-headers"))
     with tempfile.TemporaryDirectory() as work:
         entry = Path(work) / "entry.o"
@@ -142,10 +143,16 @@ def main():
         else:
             run(*launcher, prefix + "objcopy", "-O", "binary", *(linux_path(arg) for arg in args))
     elif action == "link":
+        sketch_cpu = "0"
+        if args[0] == "--sketch-cpu":
+            sketch_cpu, args = args[1], args[2:]
         if mode == "xappv2":
+            if sketch_cpu not in ("0", "2", "3", "-1"):
+                raise ValueError("Sketch CPU must be 0, 2, 3, or Auto")
             if WINDOWS:
                 run(*launcher, "python3", linux_path(__file__), model, bits, cpu, mode, action,
-                    "--v2-host", linux_path(v2_host()), *(linux_path(arg) for arg in args))
+                    "--sketch-cpu", sketch_cpu, "--v2-host", linux_path(v2_host()),
+                    *(linux_path(arg) for arg in args))
             else:
                 if args[0] == "--v2-host":
                     host = Path(args[1])
@@ -153,7 +160,7 @@ def main():
                 else:
                     host = v2_host()
                 output, archive, *objects = args
-                link_v2(host, output, archive, objects)
+                link_v2(host, output, archive, objects, sketch_cpu)
         elif mode == "xapp":
             host = os.environ.get("RPIDUINO_XDOS_HOST")
             if args[0] == "--host":
