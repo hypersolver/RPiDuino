@@ -45,6 +45,8 @@ void loop() {
 
 按 **驗證**，再用 **草稿 → 匯出編譯的二進位檔** 取得 IMG。第一次部署可走 microSD。依機型把 IMG 放進有對應開機韌體的 FAT 開機分割區，按照 [上傳及開機指南](docs/upload.md#從-microsd-啟動) 設定檔名和 `config.txt`。插卡開機後，板上的 ACT LED 應每半秒切換一次。XDOS 專案已在 Pi 3B+ 以 0.1.4 驗證 Arduino IDE 編譯、UART 上傳及 ACT LED 閃爍。
 
+[首批六組範例](docs/examples.md)包含 GPIO、雙草稿並行和 Message Tunnel 儀表板。
+
 ## 選擇上傳方式
 
 | 方式 | 機型與前置條件 | 結果 |

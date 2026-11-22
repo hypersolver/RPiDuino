@@ -10,6 +10,8 @@
 4. 選 **RPiDuino 3/3B+ → Build target → XDOS XAPP V2 (MC4FQ)**，再開啟 **RPiDuino Basics → XDOSV2** 的範例。Arduino CLI 的 FQBN 為 `rpiduino:bcm:rpiduino3:target=xappv2`。
 5. 上傳後記下工具列出的 `.XAPP` 檔名。以 XDOS UART 的 `XAPP2 <檔名>` 啟動，並用 `XAPP2-STATUS` 和 `XAPP2-CLOSE <槽號>` 驗證槽的使用與回收。
 
+兩組草稿在範例選單中的完整路徑及操作方式見 [首批範例](examples.md)。
+
 ## 驗收
 
 先分別啟動 `V2Counter` 和 `V2Monitor`。兩個獨立的 V2 槽都應顯示為使用中，UART 應各出現一行首次更新的訊息。分別關閉再重新開啟，確認另一支程式持續運作。

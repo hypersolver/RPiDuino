@@ -55,6 +55,8 @@ On Pi 3/3B+, select **Tools → Build target → Standalone IMG**. Click **Verif
 
 The Raspberry Pi XDOS project verified the 0.1.4 Blink build in Arduino IDE, uploaded it over UART to a Pi 3B+, and observed its ACT LED blinking.
 
+See the [first six example projects](docs/examples.en.md) for GPIO, concurrent sketches and the Message Tunnel dashboard.
+
 ## LVGL and multicore
 
 Select **XDOS XAPP** and open **File → Examples → RPiDuino Basics → XDOS → XappLvgl** to build an LVGL click counter. Choose the Debug UART port, upload, and launch it from `SD:/XDOS/INBOX` in XDOS Files. Use the host's LVGL instance to create widgets and handle UI events. The optional [RGB565 library](libraries/RPiduino_LVGL_RGB565) also includes a RAM framebuffer example for custom display integration.
