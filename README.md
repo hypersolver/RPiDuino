@@ -14,13 +14,13 @@ RPiDuino 是 Raspberry Pi 的 Arduino IDE 板卡套件。用 `setup()` 和 `loop
    sudo apt install git make python3 gcc-arm-none-eabi libstdc++-arm-none-eabi-dev gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
    ```
 
-3. 開啟 Arduino IDE 2，在 **檔案 → 偏好設定 → 額外的開發板管理員網址** 貼上板卡索引。獨立倉庫發布前，可使用原專案提供的同版套件。
+3. 開啟 Arduino IDE 2，在 **檔案 → 偏好設定 → 額外的開發板管理員網址** 貼上 RPiDuino 板卡索引。
 
    ```text
-   https://raw.githubusercontent.com/hypersolver/raspberry-pi-xdos/main/package_rpiduino_index.json
+   https://raw.githubusercontent.com/hypersolver/RPiDuino/main/package_rpiduino_index.json
    ```
 
-   獨立倉庫發布後，將網址改為 `https://raw.githubusercontent.com/hypersolver/RPiDuino/main/package_rpiduino_index.json`。
+   [舊版 XDOS 板卡索引](https://raw.githubusercontent.com/hypersolver/raspberry-pi-xdos/main/package_rpiduino_index.json)仍保留，已使用舊網址的安裝可繼續使用。
 
 4. 開啟 **開發板管理員**，搜尋 **RPiDuino** 並安裝 **0.1.4**。在 **工具 → 開發板 → RPiDuino** 選擇對應的 Pi 2、3/3B+、4 或 5。
 

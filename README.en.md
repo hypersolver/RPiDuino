@@ -14,11 +14,13 @@ RPiDuino compiles Arduino sketches into bootable images for Raspberry Pi. The Pi
    sudo apt install git make python3 gcc-arm-none-eabi libstdc++-arm-none-eabi-dev gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
    ```
 
-3. In Arduino IDE 2, open **File → Preferences → Additional Boards Manager URLs**. Use the existing published index until the standalone repository is online.
+3. In Arduino IDE 2, open **File → Preferences → Additional Boards Manager URLs**. Add the RPiDuino board index.
 
    ```text
-   https://raw.githubusercontent.com/hypersolver/raspberry-pi-xdos/main/package_rpiduino_index.json
+   https://raw.githubusercontent.com/hypersolver/RPiDuino/main/package_rpiduino_index.json
    ```
+
+   Existing installations can continue using the [legacy XDOS index](https://raw.githubusercontent.com/hypersolver/raspberry-pi-xdos/main/package_rpiduino_index.json).
 
 4. Search for **RPiDuino** in Boards Manager, install **0.1.4**, and select your Raspberry Pi model under **Tools → Board → RPiDuino**.
 
