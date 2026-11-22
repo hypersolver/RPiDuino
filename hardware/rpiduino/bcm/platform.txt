@@ -26,3 +26,4 @@ tools.xdos_uart.upload.pattern="{rpiduino.python}" "{runtime.platform.path}/tool
 tools.usb_cdc.upload.pattern="{rpiduino.python}" "{runtime.platform.path}/tools/upload.py" "{upload.port.address}" "{build.path}/{build.project_name}.{build.extension}" --cdc-board {build.model}
 
 tools.xdos_xapp.upload.pattern="{rpiduino.python}" "{runtime.platform.path}/tools/upload.py" "{upload.port.address}" "{build.path}/{build.project_name}.xapp" --xapp
+tools.xdos_xappv2.upload.pattern="{rpiduino.python}" "{runtime.platform.path}/tools/upload.py" "{upload.port.address}" "{build.path}/{build.project_name}.xapp" --xapp-v2

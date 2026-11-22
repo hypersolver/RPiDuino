@@ -38,3 +38,7 @@ rpiduino3.menu.target.xapp=XDOS XAPP
 rpiduino3.menu.target.xapp.build.mode=xapp
 rpiduino3.menu.target.xapp.build.extension=xapp
 rpiduino3.menu.target.xapp.upload.tool.serial=xdos_xapp
+rpiduino3.menu.target.xappv2=XDOS XAPP V2 (MC4FQ)
+rpiduino3.menu.target.xappv2.build.mode=xappv2
+rpiduino3.menu.target.xappv2.build.extension=xapp
+rpiduino3.menu.target.xappv2.upload.tool.serial=xdos_xappv2

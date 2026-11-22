@@ -55,7 +55,7 @@ void loop() {
 | USB-C CDC | Pi 4B／5，Raspberry Pi OS 測試卡與 CDC 接收程式 | IDE 上傳裸機 IMG，再重開機。實機流程待驗證 |
 | XDOS XAPP | Pi 3B+，配對的 XDOS FILEQ128 與 Debug UART | IDE 上傳 `.xapp` 至 XDOS 的收件目錄，再從 Files 啟動 |
 
-各方式的接線、設定與回復步驟見 [上傳及開機指南](docs/upload.md)。開始製作介面可看 [Arduino LVGL UI](docs/lvgl.md)。想在同一顆 Raspberry Pi 的多個核心上執行多支程式，可看 [XDOS 多核心與程式間通訊](docs/multicore.md)。
+各方式的接線、設定與回復步驟見 [上傳及開機指南](docs/upload.md)。開始製作介面可看 [Arduino LVGL UI](docs/lvgl.md)。想在同一顆 Raspberry Pi 的多個核心上執行多支程式，可看 [XDOS 多核心與程式間通訊](docs/multicore.md)。 V2 原始碼試用方式請參考 [Arduino V2 測試指南](docs/arduino-v2.md)。
 
 ## 原始碼與發行
 

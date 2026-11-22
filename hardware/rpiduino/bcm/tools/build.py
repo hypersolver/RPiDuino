@@ -80,6 +80,36 @@ def link(model, bits, prefix, output, archive, objects):
         shutil.copyfile(elf, output)
 
 
+def v2_host():
+    path = os.environ.get("RPIDUINO_XDOS_V2_HOST")
+    if not path or not Path(path).is_dir():
+        raise ValueError("Set RPIDUINO_XDOS_V2_HOST to the paired MC4FQ host directory")
+    return Path(path).resolve()
+
+
+def link_v2(host, output, archive, objects):
+    from xapp_v2_pack import kernel_fingerprint, kernel_symbols, pack
+
+    tools = Path(__file__).resolve().parent
+    flags = ("-mcpu=cortex-a53", "-marm", "-mfloat-abi=hard", "-mfpu=neon-vfpv4",
+             "-Os", "-std=gnu++17", "-ffreestanding", "-ffunction-sections",
+             "-fdata-sections", "-fno-exceptions", "-fno-rtti", "-mword-relocations",
+             "-fno-unwind-tables", "-fno-asynchronous-unwind-tables",
+             "-DLV_CONF_INCLUDE_SIMPLE", "-I" + str(host / "headers"),
+             "-I" + str(tools / "xapp-headers"))
+    with tempfile.TemporaryDirectory() as work:
+        entry = Path(work) / "entry.o"
+        run("arm-none-eabi-g++", *flags, "-c", tools / "arduino_v2_entry.cpp", "-o", entry)
+        combined = Path(work) / "module.o"
+        run("arm-none-eabi-ld", "-r", entry, *objects, archive, "-o", combined)
+        symbols = kernel_symbols(host / "kernel.elf")
+        fingerprint = kernel_fingerprint(symbols, host / "kernel.img")
+        module = Path(work) / "sketch.xapp"
+        result = pack([combined], symbols, fingerprint, module, keep=work)
+        shutil.copyfile(result["elf"], output)
+        shutil.copyfile(module, output + ".xapp")
+
+
 def main():
     model, bits, cpu, mode, action, *args = sys.argv[1:]
     prefix = "arm-none-eabi-" if bits == "32" else "aarch64-linux-gnu-"
@@ -89,11 +119,14 @@ def main():
         driver = "gcc" if action == "cc" else "g++"
         architecture = ["-marm", "-mfloat-abi=hard", "-mfpu=neon-vfpv4"] if bits == "32" else []
         xapp_flags = []
-        if mode == "xapp":
+        if mode in ("xapp", "xappv2"):
             xapp_flags.extend(("-DRPIDUINO_XDOS_XAPP=1", "-DRPIDUINO_LVGL_HOST_TIMER=1",
                                "-DLV_CONF_INCLUDE_SIMPLE", "-fno-unwind-tables",
                                "-fno-asynchronous-unwind-tables"))
             sdk = os.environ.get("RPIDUINO_XDOS_HEADERS", Path(__file__).with_name("xapp-headers"))
+            if mode == "xappv2":
+                xapp_flags.extend(("-DRPIDUINO_XDOS_XAPP_V2=1", "-mword-relocations",
+                                   "-I" + linux_path(v2_host() / "headers")))
             if sdk:
                 base = Path(sdk)
                 for child in ("", "lvgl", "addon", "include"):
@@ -104,9 +137,24 @@ def main():
     elif action == "ar":
         run(*launcher, prefix + "ar", "rcs", *(linux_path(arg) for arg in args))
     elif action == "image":
-        run(*launcher, prefix + "objcopy", "-O", "binary", *(linux_path(arg) for arg in args))
+        if mode == "xappv2":
+            shutil.copyfile(args[0] + ".xapp", args[1])
+        else:
+            run(*launcher, prefix + "objcopy", "-O", "binary", *(linux_path(arg) for arg in args))
     elif action == "link":
-        if mode == "xapp":
+        if mode == "xappv2":
+            if WINDOWS:
+                run(*launcher, "python3", linux_path(__file__), model, bits, cpu, mode, action,
+                    "--v2-host", linux_path(v2_host()), *(linux_path(arg) for arg in args))
+            else:
+                if args[0] == "--v2-host":
+                    host = Path(args[1])
+                    args = args[2:]
+                else:
+                    host = v2_host()
+                output, archive, *objects = args
+                link_v2(host, output, archive, objects)
+        elif mode == "xapp":
             host = os.environ.get("RPIDUINO_XDOS_HOST")
             if args[0] == "--host":
                 host = args[1]
@@ -135,5 +183,5 @@ def main():
 if __name__ == "__main__":
     try:
         main()
-    except (OSError, ValueError, subprocess.CalledProcessError) as error:
+    except (OSError, ValueError, RuntimeError, ImportError, subprocess.CalledProcessError) as error:
         raise SystemExit(f"RPiDuino build failed: {error}") from error

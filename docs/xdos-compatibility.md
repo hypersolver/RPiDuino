@@ -4,7 +4,7 @@
 | --- | --- | --- |
 | Standalone IMG | Circle at the pinned revision / 固定版 Circle | Arduino IDE build, Debug UART upload and ACT LED verified on Pi 3B+ with v0.1.4 / Pi 3B+ 已驗證 |
 | XDOS XAPP in SDK 0.1.4 | Pi 3B+ FILEQ128, bundled host manifest and headers / 內附主系統符號清單與標頭 | Released / 已發布 |
-| Arduino V2 XAPP | Pi 3B+ MC4FQ, matching V2 entry/packaging tools and host ABI inputs / 配對的 V2 啟動、打包工具及 ABI 資料 | Prototype entry point only. SDK integration and hardware acceptance are pending / 啟動器試作，待整合與實機驗收 |
+| Arduino V2 XAPP | Pi 3B+ MC4FQ, matching V2 entry/packaging tools and host ABI inputs / 配對的 V2 啟動、打包工具及 ABI 資料 | Experimental source target / 原始碼提供試驗目標，請見 [Arduino V2 測試指南](arduino-v2.md) |
 
 XDOS owns the loader, core scheduling, firmware image and the XAPP ABI. The SDK owns the Arduino entry point, build recipes, package index, and examples. For each supported host build, keep its kernel image and ELF, exported `xapp-host.json`, XAPP API headers, and LVGL/FatFs configuration together. The existing XDOS XAPP build accepts `RPIDUINO_XDOS_HOST` and `RPIDUINO_XDOS_HEADERS` overrides for matching inputs. A host manifest override by itself does not add V2 packaging support.
 
